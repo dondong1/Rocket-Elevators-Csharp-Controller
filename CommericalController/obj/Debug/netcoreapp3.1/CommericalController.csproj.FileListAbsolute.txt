@@ -1,0 +1,12 @@
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\bin\Debug\netcoreapp3.1\CommericalController.exe
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\bin\Debug\netcoreapp3.1\CommericalController.deps.json
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\bin\Debug\netcoreapp3.1\CommericalController.runtimeconfig.json
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\bin\Debug\netcoreapp3.1\CommericalController.runtimeconfig.dev.json
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\bin\Debug\netcoreapp3.1\CommericalController.dll
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\bin\Debug\netcoreapp3.1\CommericalController.pdb
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.AssemblyInfoInputs.cache
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.AssemblyInfo.cs
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.csproj.CoreCompileInputs.cache
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.dll
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.pdb
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.genruntimeconfig.cache
