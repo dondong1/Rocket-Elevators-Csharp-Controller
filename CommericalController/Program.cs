@@ -16,19 +16,19 @@ namespace Commercial_Controller_CS
         public int amountOfFloors;                    //Floors of the building excluding the number of basements
         public int amountOfBasements;
         public int totalNumberOfFloors;               //amountOfFloors + Math.abs(amountOfBasements)
-        public int amountOfElevatorPerColumn;
+        public int amountOfElevators;
         public int numberOfFloorsPerColumn;
         public BatteryStatus status;
         public List<Column> columnsList;
 
         //----------------- Constructor and its attributes -----------------//
-        public Battery(int batteryId, int batteryamountOfColumns, int batteryTotalNumberOfFloors, int batteryamountOfBasements, int batteryamountOfElevatorPerColumn, BatteryStatus batteryStatus)
+        public Battery(int batteryId, int batteryamountOfColumns, int batteryTotalNumberOfFloors, int batteryamountOfBasements, int batteryamountOfElevators, BatteryStatus batteryStatus)
         {
             id = batteryId;
             amountOfColumns = batteryamountOfColumns;
             totalNumberOfFloors = batteryTotalNumberOfFloors;
             amountOfBasements = batteryamountOfBasements;
-            amountOfElevatorPerColumn = batteryamountOfElevatorPerColumn;
+            amountOfElevators = batteryamountOfElevators;
             status = batteryStatus;
             columnsList = new List<Column>();
             numberOfFloorsPerColumn = calculateNumberOfFloorsPerColumn();
@@ -42,7 +42,7 @@ namespace Commercial_Controller_CS
         /* ******* GET A STRING REPRESENTATION OF BATTERY OBJECT ******* */
         public override string ToString()
         {
-            return "battery" + this.id + " | Basements: " + this.amountOfBasements + " | Columns: " + this.amountOfColumns + " | Elevators per column: " + this.amountOfElevatorPerColumn;
+            return "battery" + this.id + " | Basements: " + this.amountOfBasements + " | Columns: " + this.amountOfColumns + " | Elevators per column: " + this.amountOfElevators;
         }
 
 
@@ -53,7 +53,7 @@ namespace Commercial_Controller_CS
             char name = 'A';
             for (int i = 1; i <= this.amountOfColumns; i++)
             {
-                this.columnsList.Add(new Column(i, name, Status.ACTIVE, this.amountOfElevatorPerColumn, numberOfFloorsPerColumn, amountOfBasements, this));
+                this.columnsList.Add(new Column(i, name, Status.ACTIVE, this.amountOfElevators, numberOfFloorsPerColumn, amountOfBasements, this));
                 // System.Console.WriteLine("column" + name + " created!!!");
                 name = Convert.ToChar(name + 1);
             }
@@ -117,8 +117,8 @@ namespace Commercial_Controller_CS
                 //adjusting the number of served floors of the columns if there are remaining floors
                 if (remainingFloors != 0)
                 { //if the remainingFloors is not zero, then it adds the remaining floors to the last column
-                    this.columnsList[this.columnsList.Count - 1].maxFloor = this.columnsList[this.columnsList.Count - 1].minFloor + this.columnsList[this.columnsList.Count - 1].numberServedFloors;
-                    this.columnsList[this.columnsList.Count - 1].numberServedFloors = numberOfFloorsPerColumn + remainingFloors;
+                    this.columnsList[this.columnsList.Count - 1].maxFloor = this.columnsList[this.columnsList.Count - 1].minFloor + this.columnsList[this.columnsList.Count - 1].servedFloors;
+                    this.columnsList[this.columnsList.Count - 1].servedFloors = numberOfFloorsPerColumn + remainingFloors;
                 }
                 //if there is a basement, then the first column will serve the basements + RDC
                 if (this.amountOfBasements > 0)
@@ -131,7 +131,7 @@ namespace Commercial_Controller_CS
         /* ******* LOGIC TO SET THE minFloor AND maxFloor FOR THE BASEMENT COLUMN ******* */
         private void initializeBasementColumnFloors()
         {
-            this.columnsList[0].numberServedFloors = (this.amountOfBasements + 1); //+1 is the RDC
+            this.columnsList[0].servedFloors = (this.amountOfBasements + 1); //+1 is the RDC
             this.columnsList[0].minFloor = amountOfBasements * -1; //the minFloor of basement is a negative number
             this.columnsList[0].maxFloor = 1; //1 is the RDC
         }
@@ -144,11 +144,11 @@ namespace Commercial_Controller_CS
             { //if its not the first column (because the first column serves the basements)
                 if (i == 1)
                 {
-                    this.columnsList[i].numberServedFloors = numberOfFloorsPerColumn;
+                    this.columnsList[i].servedFloors = numberOfFloorsPerColumn;
                 }
                 else
                 {
-                    this.columnsList[i].numberServedFloors = (numberOfFloorsPerColumn + 1); //Add 1 floor for the RDC/ground floor
+                    this.columnsList[i].servedFloors = (numberOfFloorsPerColumn + 1); //Add 1 floor for the RDC/ground floor
                 }
                 this.columnsList[i].minFloor = minimumFloor;
                 this.columnsList[i].maxFloor = this.columnsList[i].minFloor + (numberOfFloorsPerColumn - 1);
@@ -160,7 +160,7 @@ namespace Commercial_Controller_CS
         private void initializeUniqueColumnFloors()
         {
             int minimumFloor = 1;
-            this.columnsList[0].numberServedFloors = totalNumberOfFloors;
+            this.columnsList[0].servedFloors = totalNumberOfFloors;
             if (amountOfBasements > 0)
             { //if there is basement
                 this.columnsList[0].minFloor = amountOfBasements;
@@ -180,10 +180,10 @@ namespace Commercial_Controller_CS
             public int id;
             public char name;
             public Status status;
-            public int amountOfElevatorPerColumn;
+            public int amountOfElevators;
             public int minFloor;
             public int maxFloor;
-            public int numberServedFloors;
+            public int servedFloors;
             public int amountOfBasements;
             public Battery battery;
             public List<Elevator> elevatorsList;
@@ -191,13 +191,13 @@ namespace Commercial_Controller_CS
             public List<Button> buttonsDownList;
 
             //----------------- Constructor and its attributes -----------------//
-            public Column(int ID, char columnName, Status Status, int columnNumberOfElevators, int servedFloors, int isBasements, Battery columnBattery)
+            public Column(int ID, char columnName, Status Status, int columnNumberOfElevators, int columnServedFloors, int isBasements, Battery columnBattery)
             {
                 id = ID;
                 name = columnName;
                 status = Status;
-                amountOfElevatorPerColumn = columnNumberOfElevators;
-                numberServedFloors = servedFloors;
+                amountOfElevators = columnNumberOfElevators;
+                servedFloors = columnServedFloors;
                 amountOfBasements = isBasements * -1;
                 battery = columnBattery;
                 elevatorsList = new List<Elevator>();
@@ -210,7 +210,7 @@ namespace Commercial_Controller_CS
             /* ******* GET A STRING REPRESENTATION OF COLUMN OBJECT ******* */
             public override string ToString()
             {
-                return "column" + this.name + " | Served floors: " + this.numberServedFloors + " | Min floor: " + this.minFloor + " | Max floor: " + this.maxFloor;
+                return "column" + this.name + " | Served floors: " + this.servedFloors + " | Min floor: " + this.minFloor + " | Max floor: " + this.maxFloor;
             }
 
 
@@ -218,9 +218,9 @@ namespace Commercial_Controller_CS
             /* ******* CREATE A LIST OF ELEVATORS FOR THE COLUMN ******* */
             public void createElevatorsList()
             {
-                for (int i = 1; i <= this.amountOfElevatorPerColumn; i++)
+                for (int i = 1; i <= this.amountOfElevators; i++)
                 {
-                    this.elevatorsList.Add(new Elevator(i, this.numberServedFloors, 1, ElevatorStatus.IDLE, SensorStatus.OFF, SensorStatus.OFF, this));
+                    this.elevatorsList.Add(new Elevator(i, this.servedFloors, 1, ElevatorStatus.IDLE, SensorStatus.OFF, SensorStatus.OFF, this));
                 }
             }
 
@@ -367,7 +367,7 @@ namespace Commercial_Controller_CS
         public class Elevator
         {
             public int id;
-            public int numberServedFloors;
+            public int servedFloors;
             public int floor;
             public ElevatorStatus status;
             public SensorStatus weightSensorStatus;
@@ -377,14 +377,14 @@ namespace Commercial_Controller_CS
             public Display elevatorDisplay;
             public List<Door> floorDoorsList;
             public List<Display> floorDisplaysList;
-            public List<Button> floorButtonsList;
-            public List<int> floorList;
+            public List<Button> floorRequestButtonsList;
+            public List<int> floorRequestList;
 
             //----------------- Constructor and its attributes -----------------//
-            public Elevator(int elevatorId, int elevatorNumberServedFloors, int elevatorFloor, ElevatorStatus elevatorStatus, SensorStatus weightStatus, SensorStatus obstructionStatus, Column elevatorColumn)
+            public Elevator(int elevatorId, int elevatorservedFloors, int elevatorFloor, ElevatorStatus elevatorStatus, SensorStatus weightStatus, SensorStatus obstructionStatus, Column elevatorColumn)
             {
                 id = elevatorId;
-                numberServedFloors = elevatorNumberServedFloors;
+                servedFloors = elevatorservedFloors;
                 floor = elevatorFloor;
                 status = elevatorStatus;
                 weightSensorStatus = weightStatus;
@@ -394,12 +394,12 @@ namespace Commercial_Controller_CS
                 elevatorDisplay = new Display(0, DisplayStatus.ON, 0);
                 floorDoorsList = new List<Door>();
                 floorDisplaysList = new List<Display>();
-                floorButtonsList = new List<Button>();
-                floorList = new List<int>();
+                floorRequestButtonsList = new List<Button>();
+                floorRequestList = new List<int>();
 
                 this.createFloorDoorsList();
                 this.createDisplaysList();
-                this.createFloorButtonsList();
+                this.createfloorRequestButtonsList();
             }
 
             //----------------- Method toString -----------------//
@@ -432,12 +432,12 @@ namespace Commercial_Controller_CS
             }
 
             /* ******* CREATE A LIST WITH A BUTTON OF EACH FLOOR ******* */
-            public void createFloorButtonsList()
+            public void createfloorRequestButtonsList()
             {
-                floorButtonsList.Add(new Button(1, ButtonStatus.OFF, 1));
+                floorRequestButtonsList.Add(new Button(1, ButtonStatus.OFF, 1));
                 for (int i = column.minFloor; i <= this.column.maxFloor; i++)
                 {
-                    this.floorButtonsList.Add(new Button(i, ButtonStatus.OFF, i));
+                    this.floorRequestButtonsList.Add(new Button(i, ButtonStatus.OFF, i));
                 }
             }
 
@@ -446,7 +446,7 @@ namespace Commercial_Controller_CS
             /* ******* LOGIC TO MOVE ELEVATOR ******* */
             public void moveElevator(int requestedFloor)
             {
-                while (this.floorList.Count > 0)
+                while (this.floorRequestList.Count > 0)
                 {
                     if (this.status == ElevatorStatus.IDLE)
                     {
@@ -480,7 +480,7 @@ namespace Commercial_Controller_CS
             /* ******* LOGIC TO MOVE UP ******* */
             public void moveUp()
             {
-                List<int> tempArray = new List<int>(this.floorList);
+                List<int> tempArray = new List<int>(this.floorRequestList);
                 for (int i = this.floor; i < tempArray[tempArray.Count - 1]; i++)
                 {
                     int j = i;
@@ -502,7 +502,7 @@ namespace Commercial_Controller_CS
                         this.manageButtonStatusOff(nextFloor);
                     }
                 }
-                if (this.floorList.Count == 0)
+                if (this.floorRequestList.Count == 0)
                 {
                     this.status = ElevatorStatus.IDLE;
                     //    System.Console.WriteLine("       Elevator" + column.name + this.id + " is now " + this.status);
@@ -517,7 +517,7 @@ namespace Commercial_Controller_CS
             /* ******* LOGIC TO MOVE DOWN ******* */
             public void moveDown()
             {
-                List<int> tempArray = new List<int>(this.floorList);
+                List<int> tempArray = new List<int>(this.floorRequestList);
                 for (int i = this.floor; i > tempArray[tempArray.Count - 1]; i--)
                 {
 
@@ -541,7 +541,7 @@ namespace Commercial_Controller_CS
                         this.manageButtonStatusOff(nextFloor);
                     }
                 }
-                if (this.floorList.Count() == 0)
+                if (this.floorRequestList.Count() == 0)
                 {
                     this.status = ElevatorStatus.IDLE;
                     //    System.Console.WriteLine("       Elevator" + column.name + this.id + " is now " + this.status);
@@ -566,7 +566,7 @@ namespace Commercial_Controller_CS
                 {
                     currentDownButton.status = ButtonStatus.OFF;
                 }
-                Button currentFloorButton = this.floorButtonsList.FirstOrDefault(button => button.id == floor);
+                Button currentFloorButton = this.floorRequestButtonsList.FirstOrDefault(button => button.id == floor);
                 if (currentFloorButton != null)
                 {
                     currentFloorButton.status = ButtonStatus.OFF;
@@ -653,20 +653,20 @@ namespace Commercial_Controller_CS
             /* ******* LOGIC TO ADD A FLOOR TO THE FLOOR LIST ******* */
             public void addFloorToFloorList(int floor)
             {
-                if (!floorList.Contains(floor))
+                if (!floorRequestList.Contains(floor))
                 {
-                    this.floorList.Add(floor);
-                    this.floorList = this.floorList.OrderBy(i => i).ToList(); //Order list ascending
+                    this.floorRequestList.Add(floor);
+                    this.floorRequestList = this.floorRequestList.OrderBy(i => i).ToList(); //Order list ascending
                 }
             }
 
             /* ******* LOGIC TO DELETE ITEM FROM FLOORS LIST ******* */
             public void deleteFloorFromList(int stopFloor)
             {
-                int index = this.floorList.IndexOf(stopFloor);
+                int index = this.floorRequestList.IndexOf(stopFloor);
                 if (index > -1)
                 {
-                    this.floorList.RemoveAt(index);
+                    this.floorRequestList.RemoveAt(index);
                 }
             }
 

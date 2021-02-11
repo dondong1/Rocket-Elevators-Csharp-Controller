@@ -10,3 +10,4 @@ C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalContr
 C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.dll
 C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.pdb
 C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.genruntimeconfig.cache
+C:\Users\Don\Documents\GitHub\Rocket-Elevators-Csharp-Controller\CommericalController\obj\Debug\netcoreapp3.1\CommericalController.csprojAssemblyReference.cache
