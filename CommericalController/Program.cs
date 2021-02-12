@@ -993,10 +993,10 @@ namespace Commercial_Controller_CS
             {
 
                 /* ******* CALL SCENARIOS ******* */
-                scenario1();
-                scenario2();
-                scenario3();
-                scenario4();
+                // scenario1();
+                // scenario2();
+                // scenario3();
+                // scenario4();
             }
         }
     }
